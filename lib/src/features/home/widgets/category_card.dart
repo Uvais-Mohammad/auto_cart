@@ -1,10 +1,11 @@
+import 'package:auto_cart/src/features/home/models/category.dart';
+import 'package:auto_cart/src/shared/extensions/string_extensions.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({super.key, required this.icon, required this.title});
+  const CategoryCard({super.key, required this.category});
 
-  final IconData icon;
-  final String title;
+  final ProductCategory category;
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +16,13 @@ class CategoryCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(
-              icon,
-              size: 40,
+            Image.network(
+              category.image.imageUrl,
+              height: 50,
+              width: 50,
             ),
             Text(
-              title,
+              category.categoryName,
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ],
