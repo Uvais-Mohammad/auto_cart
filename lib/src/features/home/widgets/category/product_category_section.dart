@@ -1,7 +1,7 @@
 import 'package:auto_cart/src/features/home/logic/category/category_provider.dart';
 import 'package:auto_cart/src/features/home/models/category.dart';
 import 'package:auto_cart/src/features/home/screens/category_screen.dart';
-import 'package:auto_cart/src/features/home/widgets/category_card.dart';
+import 'package:auto_cart/src/features/home/widgets/category/category_card.dart';
 import 'package:auto_cart/src/shared/extensions/navigation_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,7 +22,6 @@ class ProductCategorySection extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
-        const SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: categories.when(
@@ -30,20 +29,23 @@ class ProductCategorySection extends ConsumerWidget {
               children: [
                 Expanded(
                   child: SizedBox(
-                    height: 110,
+                    height: 90,
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (context, index) =>
-                          CategoryCard(category: data[index]),
-                    ),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return const SizedBox.shrink();
+                          }
+                          return CategoryCard(category: data[index]);
+                        }),
                   ),
                 ),
                 //view all button
                 SizedBox(
-                  height: 110,
+                  height: 90,
                   child: Card(
-                    margin: const EdgeInsets.fromLTRB(10, 8, 6, 8),
+                    margin: const EdgeInsets.fromLTRB(4, 4, 6, 4),
                     child: InkWell(
                       onTap: () {
                         context.push(const CategoryScreen());
