@@ -7,6 +7,8 @@ import 'package:auto_cart/src/shared/constants/endpoints.dart';
 import 'package:auto_cart/src/shared/extensions/string_extensions.dart';
 import 'package:auto_cart/src/shared/services/http_service/http_servide.dart';
 import 'package:auto_cart/src/shared/services/http_service/i_http_service.dart';
+import 'package:auto_cart/src/shared/utils/pagination/pagination_request.dart';
+import 'package:auto_cart/src/shared/utils/pagination/pagination_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final homeRepositoryProvider = Provider<IHomeRepository>(
@@ -39,7 +41,7 @@ final class HomeRepository implements IHomeRepository {
   }
 
   @override
-  Future<List<Product>> getProducts() async {
+  Future<PaginationResponse<Product>> getProducts(PaginationRequest request) async {
     final response = await _httpService.get(
       EndPoints.product.url,
     );
@@ -48,7 +50,14 @@ final class HomeRepository implements IHomeRepository {
           (jsonDecode(response.body)['productlist'] as List)
               .map((e) => Product.fromJson(e))
               .toList();
-      return products;
+      return PaginationResponse(
+        meta: MetaData(
+          page: request.page,
+          perPage: request.perPage,
+          totalPage: 10,
+        ),
+        data: products,
+      );
     } else {
       throw Exception('Failed to load products');
     }
