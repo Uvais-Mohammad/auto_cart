@@ -11,7 +11,7 @@ class Product {
   final String? createdAt;
   final String? updatedAt;
   final int? catId;
-  final List<String>? images;
+  final String images;
 
   const Product({
     this.id,
@@ -26,7 +26,7 @@ class Product {
     this.createdAt,
     this.updatedAt,
     this.catId,
-    this.images,
+    required this.images,
   });
 
   Product.fromJson(Map<String, dynamic> json)
@@ -42,7 +42,7 @@ class Product {
         createdAt = json['created_at'] as String?,
         updatedAt = json['updated_at'] as String?,
         catId = json['cat_id'] as int?,
-        images = json['images'] as List<String>?;
+        images = json['images'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

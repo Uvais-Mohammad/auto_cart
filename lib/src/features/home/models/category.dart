@@ -1,20 +1,20 @@
 class ProductCategory {
   final int id;
   final String categoryName;
-  final int catId;
-  final String image;
-  final String createdAt;
-  final String updatedAt;
-  final int status;
+  final int? catId;
+  final String? image;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? status;
 
   const ProductCategory({
     required this.id,
     required this.categoryName,
-    required this.catId,
-    required this.image,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.status,
+    this.catId,
+    this.image,
+    this.createdAt,
+    this.updatedAt,
+    this.status,
   });
 
   ProductCategory.fromJson(Map<String, dynamic> json)
