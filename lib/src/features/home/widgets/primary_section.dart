@@ -6,29 +6,25 @@ class PrimarySection extends StatelessWidget {
     super.key,
   });
 
-
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: PrimaryCard(
-              title: 'Bookings',
-              subtitle: 'View\nbookings',
-              icon: Icons.book_online_outlined,
-            ),
+    return const Row(
+      children: [
+        Expanded(
+          child: PrimaryCard(
+            title: 'Bookings',
+            subtitle: 'View\nbookings',
+            icon: Icons.book_online_outlined,
           ),
-          Expanded(
-            child: PrimaryCard(
-              title: 'Offers',
-              subtitle: 'Add/view\noffers',
-              icon: Icons.local_offer_outlined,
-            ),
+        ),
+        Expanded(
+          child: PrimaryCard(
+            title: 'Offers',
+            subtitle: 'Add/view\noffers',
+            icon: Icons.local_offer_outlined,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
