@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:auto_cart/src/features/home/models/category.dart';
+import 'package:auto_cart/src/features/home/models/product.dart';
 import 'package:auto_cart/src/features/home/repository/i_home_repo.dart';
 import 'package:auto_cart/src/shared/constants/endpoints.dart';
 import 'package:auto_cart/src/shared/extensions/string_extensions.dart';
@@ -34,6 +35,22 @@ final class HomeRepository implements IHomeRepository {
       return categories;
     } else {
       throw Exception('Failed to load categories');
+    }
+  }
+
+  @override
+  Future<List<Product>> getProducts() async {
+    final response = await _httpService.get(
+      EndPoints.product.url,
+    );
+    if (response.statusCode == 200) {
+      final List<Product> products =
+          (jsonDecode(response.body)['productlist'] as List)
+              .map((e) => Product.fromJson(e))
+              .toList();
+      return products;
+    } else {
+      throw Exception('Failed to load products');
     }
   }
 }
