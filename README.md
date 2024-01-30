@@ -40,7 +40,7 @@ The codebase adheres to a feature-level architecture, promoting a clean and modu
 1. Clone the repository
 
 ```sh
-git clone https://github.com/Uvais-Mohammad/ml_app.git
+git clone https://github.com/Uvais-Mohammad/auto_cart.git
 ```
 
 2. Install dependencies
