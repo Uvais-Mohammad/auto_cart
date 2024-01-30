@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:auto_cart/src/features/home/models/brand.dart';
+import 'package:auto_cart/src/features/home/models/cart_item.dart';
 import 'package:auto_cart/src/features/home/models/category.dart';
 import 'package:auto_cart/src/features/home/models/product.dart';
+import 'package:auto_cart/src/features/home/models/product_detail.dart';
 import 'package:auto_cart/src/features/home/repository/i_home_repo.dart';
 import 'package:auto_cart/src/shared/constants/endpoints.dart';
 import 'package:auto_cart/src/shared/extensions/string_extensions.dart';
@@ -99,7 +101,7 @@ final class HomeRepository implements IHomeRepository {
   @override
   Future<List<Brand>> getBrands(int subCatId) async {
     final response = await _httpService.post(
-      EndPoints.brand.url,
+      EndPoints.brand,
       body: {
         'subcat_id': subCatId,
       },
@@ -114,9 +116,10 @@ final class HomeRepository implements IHomeRepository {
       throw Exception('Failed to load brands');
     }
   }
-  
+
   @override
-  Future<PaginationResponse<Product>> getProductBySubCategory({required int index, required int catId}) async{
+  Future<PaginationResponse<Product>> getProductBySubCategory(
+      {required int index, required int catId}) async {
     final response = await _httpService.post(
       EndPoints.productByCategory,
       body: {
@@ -136,6 +139,134 @@ final class HomeRepository implements IHomeRepository {
       );
     } else {
       throw Exception('Failed to load products');
+    }
+  }
+
+  @override
+  Future<List<CartItem>> getCartItems(int shopId) async {
+    final response = await _httpService.post(
+      EndPoints.cart,
+      body: {
+        'shop_id': shopId,
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<CartItem> cartItems =
+          (jsonDecode(response.body)['cart'] as List)
+              .map((e) => CartItem.fromJson(e))
+              .toList();
+      return cartItems;
+    } else {
+      throw Exception('Failed to load cart items');
+    }
+  }
+
+  @override
+  Future<bool> addToCart(
+      {required int shopId,
+      required int productId,
+      required int quantity}) async {
+    final response = await _httpService.post(
+      EndPoints.addToCart,
+      body: {
+        'shop_id': shopId,
+        'product_id': productId,
+        'qty': quantity,
+      },
+    );
+    if (response.statusCode == 200) {
+      final res = jsonDecode(response.body);
+      if (res['error'] == false) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> removeFromCart({required int id}) async {
+    final response = await _httpService.post(
+      EndPoints.removeFromCart,
+      body: {
+        'id': id,
+      },
+    );
+    if (response.statusCode == 200) {
+      final res = jsonDecode(response.body);
+      if (res['data'] == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  
+  @override
+  Future<PaginationResponse<Product>> searchProducts({required int index, required String query}) async{
+    final response = await _httpService.post(
+      EndPoints.searchProduct,
+      body: {
+        'index': index,
+        'productname': query,
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<Product> products =
+          (jsonDecode(response.body)['product'] as List)
+              .map((e) => Product.fromJson(e))
+              .toList();
+      return PaginationResponse(
+        index: index,
+        data: products,
+        isCompleted: products.isEmpty,
+      );
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+  
+  @override
+  Future<PaginationResponse<Product>> getProductsByBrand({required int index, required int brandId})async {
+    final response = await _httpService.post(
+      EndPoints.brandFilter,
+      body: {
+        'index': index,
+        'brand_id': brandId,
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<Product> products =
+          (jsonDecode(response.body)['product'] as List)
+              .map((e) => Product.fromJson(e))
+              .toList();
+      return PaginationResponse(
+        index: index,
+        data: products,
+        isCompleted: products.isEmpty,
+      );
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
+  @override
+  Future<ProductDetail> getProductDetail(int id) async{
+    final response = await _httpService.post(
+      EndPoints.productDetails,
+      body: {
+        'productid': id,
+      },
+    );
+    if (response.statusCode == 200) {
+      final productDetail = ProductDetail.fromJson(jsonDecode(response.body)['productdetails'].first);
+      return productDetail;
+    } else {
+      throw Exception('Failed to load product detail');
     }
   }
 }
