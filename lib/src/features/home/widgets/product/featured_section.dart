@@ -1,6 +1,6 @@
 import 'package:auto_cart/src/features/home/logic/product/product_provider.dart';
 import 'package:auto_cart/src/features/home/models/product.dart';
-import 'package:auto_cart/src/features/home/screens/product_screen.dart';
+import 'package:auto_cart/src/features/home/screens/products/product_screen.dart';
 import 'package:auto_cart/src/features/home/widgets/product/product_card.dart';
 import 'package:auto_cart/src/shared/extensions/navigation_extensions.dart';
 import 'package:auto_cart/src/shared/utils/pagination/pagination_response.dart';

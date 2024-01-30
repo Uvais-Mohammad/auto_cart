@@ -1,6 +1,7 @@
 import 'package:auto_cart/src/features/home/logic/category/category_provider.dart';
 import 'package:auto_cart/src/features/home/models/category.dart';
 import 'package:auto_cart/src/features/home/screens/category_screen.dart';
+import 'package:auto_cart/src/features/home/screens/products/product_screen.dart';
 import 'package:auto_cart/src/features/home/widgets/category/category_card.dart';
 import 'package:auto_cart/src/shared/extensions/navigation_extensions.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,11 @@ class ProductCategorySection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ProductCategory>> categories =
         ref.watch(productCategoryProvider);
+    void setCategoryAndNavigateToProductScreen(ProductCategory category) {
+      ref.read(selectedCategoryProvider.notifier).state = category;
+      context.push(const ProductScreen());
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -37,7 +43,13 @@ class ProductCategorySection extends ConsumerWidget {
                           if (index == 0) {
                             return const SizedBox.shrink();
                           }
-                          return CategoryCard(category: data[index]);
+                          return CategoryCard(
+                            category: data[index],
+                            onTap: () {
+                              setCategoryAndNavigateToProductScreen(
+                                  data[index]);
+                            },
+                          );
                         }),
                   ),
                 ),

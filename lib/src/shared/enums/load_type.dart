@@ -1,6 +1,7 @@
 enum LoadingType{
   initial,
   // filteredByCategory,
-  // filteredBySearch,
+  filteredByBrand,
+  filteredBySearch,
   filteredBySubCategory,
 }

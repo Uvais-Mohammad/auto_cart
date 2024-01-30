@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:auto_cart/src/features/home/logic/brand/brand_providers.dart';
 import 'package:auto_cart/src/features/home/logic/category/category_provider.dart';
 import 'package:auto_cart/src/features/home/models/product.dart';
+import 'package:auto_cart/src/features/home/models/product_detail.dart';
 import 'package:auto_cart/src/features/home/repository/home_repo.dart';
 import 'package:auto_cart/src/shared/enums/load_type.dart';
 import 'package:auto_cart/src/shared/utils/pagination/pagination_controller.dart';
@@ -14,6 +16,14 @@ final productProvider =
 
 final currentLoadingTypeProvider = StateProvider<LoadingType>((ref) {
   return LoadingType.initial;
+});
+
+final searchQueryProvider = StateProvider<String>((ref) {
+  return '';
+});
+
+final productDetailProvider = FutureProvider.family<ProductDetail, int>((ref, productId) async {
+  return ref.read(homeRepositoryProvider).getProductDetail(productId);
 });
 
 class ProductController extends AsyncNotifier<PaginationResponse<Product>>
@@ -36,6 +46,18 @@ class ProductController extends AsyncNotifier<PaginationResponse<Product>>
               index: index,
               catId: catId,
             );
+      case LoadingType.filteredBySearch:
+        final searchQuery = ref.read(searchQueryProvider.notifier).state;
+        return await ref.read(homeRepositoryProvider).searchProducts(
+              index: index,
+              query: searchQuery,
+            );
+      case LoadingType.filteredByBrand:
+        final brandId = ref.read(selectedBrandProvider.notifier).state;
+        return await ref.read(homeRepositoryProvider).getProductsByBrand(
+              index: index,
+              brandId: brandId!.id,
+            );
     }
   }
 
@@ -48,6 +70,41 @@ class ProductController extends AsyncNotifier<PaginationResponse<Product>>
               index: 0,
               catId: catId,
             );
+      },
+    );
+  }
+
+  Future<void> filterBySearch() async {
+    state = const AsyncLoading<PaginationResponse<Product>>();
+    final searchQuery = ref.read(searchQueryProvider.notifier).state;
+    state = await AsyncValue.guard(
+      () async {
+        return ref.read(homeRepositoryProvider).searchProducts(
+              index: 0,
+              query: searchQuery,
+            );
+      },
+    );
+  }
+
+  Future<void> filterByBrand() async {
+    state = const AsyncLoading<PaginationResponse<Product>>();
+    final brandId = ref.read(selectedBrandProvider.notifier).state;
+    state = await AsyncValue.guard(
+      () async {
+        return ref.read(homeRepositoryProvider).getProductsByBrand(
+              index: 0,
+              brandId: brandId!.id,
+            );
+      },
+    );
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading<PaginationResponse<Product>>();
+    state = await AsyncValue.guard(
+      () async {
+        return ref.read(homeRepositoryProvider).getProducts(0);
       },
     );
   }
