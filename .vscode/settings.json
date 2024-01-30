@@ -3,7 +3,9 @@
         "brandlist",
         "categoryid",
         "categorylist",
+        "productid",
         "productlist",
+        "productname",
         "subcategorylist"
     ]
 }
