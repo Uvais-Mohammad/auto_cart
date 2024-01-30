@@ -62,5 +62,14 @@ ThemeData lightTheme = ThemeData(
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
         ),
-        
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
       );
